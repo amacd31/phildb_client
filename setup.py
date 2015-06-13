@@ -4,7 +4,6 @@ from io import open
 import versioneer
 
 from setuptools import setup
-from pip.req import parse_requirements
 
 here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
@@ -12,8 +11,7 @@ with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
             line for line in f.readlines() if 'travis-ci' not in line
         ])
 
-install_reqs = parse_requirements('python_requirements')
-requirements = [str(ir.req) for ir in install_reqs]
+requirements = ['pandas>=0.14']
 
 setup(
     name='phildb_client',
