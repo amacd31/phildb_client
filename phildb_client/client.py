@@ -106,7 +106,19 @@ class PhilDBClient(object):
             :type kwargs: kwargs
             :returns: list(string) -- Sorted list of timeseries identifiers.
         """
-        raise NotImplemented()
+        url = self.server + '/ts_list.json'
+
+        num_attrs = len(kwargs)
+        if num_attrs > 0:
+            url += '?'
+
+        for key, value in kwargs.items():
+            url += key + '=' + value
+            num_attrs -= 1
+            if num_attrs > 0:
+                url += '&'
+
+        return pd.read_json(url, typ='ser').values
 
     def list_ids(self):
         """
