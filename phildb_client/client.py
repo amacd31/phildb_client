@@ -55,13 +55,11 @@ class PhilDBClient(object):
             url += '?'
 
         for key, value in kwargs.items():
-            print(num_attrs)
             url += key + '=' + value
             num_attrs -= 1
             if num_attrs > 0:
                 url += '&'
 
-        print(url)
         return pd.read_json(url, typ='ser')
 
     def read_all(self, freq, excludes = None, **kwargs):
