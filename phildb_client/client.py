@@ -106,6 +106,15 @@ class PhilDBClient(object):
         """
         raise NotImplemented()
 
+    def __get_list(self, list_name, kwargs):
+
+        url = self.__attach_kwargs_to_url(
+                self.server + '/list/{0}.json'.format(list_name),
+                kwargs
+            )
+
+        return pd.read_json(url, typ='ser').values.tolist()
+
     def ts_list(self, **kwargs):
         """
             Returns list of primary ID for all timeseries records.
@@ -115,12 +124,7 @@ class PhilDBClient(object):
             :type kwargs: kwargs
             :returns: list(string) -- Sorted list of timeseries identifiers.
         """
-        url = self.__attach_kwargs_to_url(
-                self.server + '/list/timeseries.json',
-                kwargs
-            )
-
-        return pd.read_json(url, typ='ser').values.tolist()
+        return self.__get_list('timeseries', kwargs)
 
     def list_ids(self):
         """
@@ -146,7 +150,7 @@ class PhilDBClient(object):
 
             :returns: list(string) -- Sorted list of timeseries identifiers.
         """
-        raise NotImplemented()
+        return self.__get_list('measurands', {})
 
     def list_sources(self):
         """
@@ -154,7 +158,7 @@ class PhilDBClient(object):
 
             :returns: list(string) -- Sorted list of source identifiers.
         """
-        raise NotImplemented()
+        return self.__get_list('sources', {})
 
     def read_metadata(self, ts_id, freq, **kwargs):
         """
