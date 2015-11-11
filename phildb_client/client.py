@@ -1,5 +1,8 @@
 import types
 import pandas as pd
+import logging
+
+logger = logging.getLogger("phildb_client")
 
 class PhilDBClient(object):
 
@@ -34,6 +37,21 @@ class PhilDBClient(object):
         """
         raise NotImplemented()
 
+    def __attach_kwargs_to_url(self, url, kwargs):
+
+        num_attrs = len(kwargs)
+        if num_attrs > 0:
+            url += '?'
+
+        for key, value in kwargs.items():
+            url += key + '=' + value
+            num_attrs -= 1
+            if num_attrs > 0:
+                url += '&'
+
+        logger.debug(url)
+
+        return url
 
     def read(self, identifier, freq, **kwargs):
         """
@@ -48,17 +66,10 @@ class PhilDBClient(object):
 
             :returns: pandas.DataFrame -- Timeseries data.
         """
-        url = self.server + '/{0}/{1}.json'.format(identifier, freq)
-
-        num_attrs = len(kwargs)
-        if num_attrs > 0:
-            url += '?'
-
-        for key, value in kwargs.items():
-            url += key + '=' + value
-            num_attrs -= 1
-            if num_attrs > 0:
-                url += '&'
+        url = self.__attach_kwargs_to_url(
+                self.server + '/{0}/{1}.json'.format(identifier, freq),
+                kwargs
+            )
 
         return pd.read_json(url, typ='ser')
 
