@@ -1,4 +1,4 @@
-from client import PhilDBClient
+from phildb_client.client import PhilDBClient
 
 from ._version import get_versions
 __version__ = get_versions()['version']
