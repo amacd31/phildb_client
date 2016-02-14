@@ -67,11 +67,11 @@ class PhilDBClient(object):
             :returns: pandas.DataFrame -- Timeseries data.
         """
         url = self.__attach_kwargs_to_url(
-                self.server + '/{0}/{1}.json'.format(identifier, freq),
+                self.server + '/{0}/{1}.msgpack'.format(identifier, freq),
                 kwargs
             )
 
-        return pd.read_json(url, typ='ser')
+        return pd.read_msgpack(url)
 
     def read_all(self, freq, excludes = None, **kwargs):
         """
@@ -109,11 +109,11 @@ class PhilDBClient(object):
     def __get_list(self, list_name, kwargs):
 
         url = self.__attach_kwargs_to_url(
-                self.server + '/list/{0}.json'.format(list_name),
+                self.server + '/list/{0}.msgpack'.format(list_name),
                 kwargs
             )
 
-        return pd.read_json(url, typ='ser').values.tolist()
+        return pd.read_msgpack(url).values.tolist()
 
     def ts_list(self, **kwargs):
         """
