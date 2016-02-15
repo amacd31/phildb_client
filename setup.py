@@ -11,7 +11,9 @@ with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
             line for line in f.readlines() if 'travis-ci' not in line
         ])
 
-requirements = ['pandas>=0.14']
+requirements = [
+    'pandas>=0.17.1',
+]
 
 setup(
     name='phildb_client',
