@@ -1,6 +1,10 @@
 import types
 import pandas as pd
 import logging
+try:
+    from urllib2 import urlopen
+except:
+    from urllib.request import urlopen
 
 logger = logging.getLogger("phildb_client")
 
@@ -113,7 +117,7 @@ class PhilDBClient(object):
                 kwargs
             )
 
-        return pd.read_msgpack(url).values.tolist()
+        return pd.read_msgpack(urlopen(url)).values.tolist()
 
     def ts_list(self, **kwargs):
         """
