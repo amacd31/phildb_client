@@ -93,7 +93,12 @@ class PhilDBClient(object):
 
             :returns: pandas.DataFrame -- Timeseries data.
         """
-        raise NotImplemented()
+        url = self.__attach_kwargs_to_url(
+                self.server + '/read_all/{0}.msgpack'.format(freq),
+                kwargs
+            )
+
+        return pd.read_msgpack(urlopen(url))
 
     def read_dataframe(self, identifiers, freq, **kwargs):
         """
