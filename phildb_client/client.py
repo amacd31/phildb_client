@@ -75,7 +75,7 @@ class PhilDBClient(object):
                 kwargs
             )
 
-        return pd.read_msgpack(url)
+        return pd.read_msgpack(urlopen(url))
 
     def read_all(self, freq, excludes = None, **kwargs):
         """
