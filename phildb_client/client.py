@@ -2,8 +2,10 @@ import types
 import pandas as pd
 import logging
 try:
+    from urllib2 import urlencode
     from urllib2 import urlopen
 except:
+    from urllib.parse import urlencode
     from urllib.request import urlopen
 
 logger = logging.getLogger("phildb_client")
@@ -47,12 +49,7 @@ class PhilDBClient(object):
         if num_attrs > 0:
             url += '?'
 
-        for key, value in kwargs.items():
-            url += key + '=' + value
-            num_attrs -= 1
-            if num_attrs > 0:
-                url += '&'
-
+        url += urlencode(kwargs, True)
         logger.debug(url)
 
         return url
@@ -77,7 +74,7 @@ class PhilDBClient(object):
 
         return pd.read_msgpack(urlopen(url))
 
-    def read_all(self, freq, excludes = None, **kwargs):
+    def read_all(self, freq, **kwargs):
         """
             Read the entire timeseries record for all matching timeseries instances.
             Optionally exclude timeseries from the final DataFrame by specifying IDs in the exclude argument.
