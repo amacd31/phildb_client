@@ -23,7 +23,7 @@ Notes
 This client is experimental and depends on the experimental `PhilDB server
 <https://github.com/amacd31/phildb_server>`_.
 By default the client reads data from the server in the `msgpack
-<https://msgpack.org>` format.
+<https://msgpack.org>`_ format.
 The data served by the server and read by the client is using the
 `experimental Pandas msgpack implementation
 <http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.to_msgpack.html>`_,
