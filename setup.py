@@ -16,7 +16,7 @@ requirements = [
 ]
 
 setup(
-    name='phildb_client',
+    name='phildb-client',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     description='PhilDB timeseries database client',
