@@ -2,7 +2,7 @@ import types
 import pandas as pd
 import logging
 try:
-    from urllib2 import urlencode
+    from urllib import urlencode
     from urllib2 import urlopen
 except:
     from urllib.parse import urlencode
