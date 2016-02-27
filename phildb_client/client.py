@@ -12,8 +12,27 @@ logger = logging.getLogger("phildb_client")
 
 class PhilDBClient(object):
 
-    def __init__(self, server):
+    def __init__(self, server, format = 'msgpack'):
+        """
+            Creates a PhilDB client object that reads from the specified PhilDB server.
+
+            Defaults to reading the msgpack format. The data format can be set to
+            'json' instead if 'msgpack' is unable to be used (e.g. if using pandas < 0.17).
+            The msgpack serialisation is using the experimental pandas implementation, so
+            while it performs well and makes sense to use (hence being the default) the
+            option to use JSON is available if compatiblity errors arise.
+
+            :param server: URL of the PhilDB server to read from.
+            :type server: string
+            :param format: Data format to use when reading from the PhilDB server. Default 'msgpack'.
+            :type format: string
+        """
         self.server = server
+
+        if format in ['msgpack', 'json']:
+            self.format = format
+        else:
+            raise NotImplementedError('Unsupported format: {0}'.format(self.format))
 
     def help(self):
         """
@@ -68,11 +87,16 @@ class PhilDBClient(object):
             :returns: pandas.DataFrame -- Timeseries data.
         """
         url = self.__attach_kwargs_to_url(
-                self.server + '/{0}/{1}.msgpack'.format(identifier, freq),
+                self.server + '/{0}/{1}.{2}'.format(identifier, freq, self.format),
                 kwargs
             )
 
-        return pd.read_msgpack(urlopen(url))
+        if self.format == 'msgpack':
+            return pd.read_msgpack(urlopen(url))
+        elif self.format == 'json':
+            return pd.read_json(urlopen(url))
+        else:
+            raise NotImplementedError('Unsupported format: {0}'.format(self.format))
 
     def read_all(self, freq, **kwargs):
         """
@@ -91,11 +115,16 @@ class PhilDBClient(object):
             :returns: pandas.DataFrame -- Timeseries data.
         """
         url = self.__attach_kwargs_to_url(
-                self.server + '/read_all/{0}.msgpack'.format(freq),
+                self.server + '/read_all/{0}.{1}'.format(freq, self.format),
                 kwargs
             )
 
-        return pd.read_msgpack(urlopen(url))
+        if self.format == 'msgpack':
+            return pd.read_msgpack(urlopen(url))
+        elif self.format == 'json':
+            return pd.read_json(urlopen(url))
+        else:
+            raise NotImplementedError('Unsupported format: {0}'.format(self.format))
 
     def read_dataframe(self, identifiers, freq, **kwargs):
         """
@@ -115,11 +144,16 @@ class PhilDBClient(object):
     def __get_list(self, list_name, kwargs):
 
         url = self.__attach_kwargs_to_url(
-                self.server + '/list/{0}.msgpack'.format(list_name),
+                self.server + '/list/{0}.{1}'.format(list_name, self.format),
                 kwargs
             )
 
-        return pd.read_msgpack(urlopen(url)).values.tolist()
+        if self.format == 'msgpack':
+            return pd.read_msgpack(urlopen(url)).values.tolist()
+        elif self.format == 'json':
+            return pd.read_json(urlopen(url)).values.tolist()
+        else:
+            raise NotImplementedError('Unsupported format: {0}'.format(self.format))
 
     def ts_list(self, **kwargs):
         """
