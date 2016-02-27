@@ -12,7 +12,7 @@ with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
         ])
 
 requirements = [
-    'pandas>=0.17.1',
+    'pandas',
 ]
 
 setup(
